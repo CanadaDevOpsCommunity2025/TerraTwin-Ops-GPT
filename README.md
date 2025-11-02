@@ -1,10 +1,10 @@
-# DevOps-Hackathon-Toronto-Team-7
+# TerraTwin | Ops GPT
 Canada DevOps Community of Practice Hackathon Toronto - Team 7 
 
-Project Name - TBD
+Project Name - TerraTwin | Ops GPT
 Team Mentor -
 
 Participant Names - 
 
-     Team Lead - 
-     Team Members - Ganga Babu, Jeffrey Gao, Kaustubh, Michael Dong, Nanda Subramaniam
+     Team Lead - Kadam Kaustubh
+     Team Members - Ganga Babu, Jeffrey Gao, Michael Dong, Nandhakumar Subramaniam
