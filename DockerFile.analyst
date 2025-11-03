@@ -8,8 +8,6 @@ RUN adduser --disabled-password --gecos "" myuser && \
     chown -R myuser:myuser /app
 
 COPY src/analyst_agent/ .
-# COPY src/root_agent/ .
-# COPY src/developer_agent/ .
 
 USER myuser
 EXPOSE 8001
