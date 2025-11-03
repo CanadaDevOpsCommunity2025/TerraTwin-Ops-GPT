@@ -10,7 +10,7 @@ steps:
       - '-c'
       - |
         echo "Initializing Terraform..."
-        terraform -chdir=terraform init -var-file=test.tfvars -backend-config="bucket=gen-ai-testing-tfstate"
+        terraform -chdir=terraform init -var="impersonate_service_account=$_IMPERSONATE_SA" -backend-config="bucket=$_BACKEND_STATE_BUCKET" -var="main_project=$_AR_PROJECT_ID"
     #dir: 'terraform/'
 
   # Step 4: Terraform Plan
@@ -21,7 +21,7 @@ steps:
       - '-c'
       - |
         echo "Creating Terraform plan..."
-        terraform -chdir=terraform plan -out=tfplan -var-file=test.tfvars 
+        terraform -chdir=terraform plan -out=tfplan -var="impersonate_service_account=$_IMPERSONATE_SA" -var="main_project=$_AR_PROJECT_ID"
     #dir: 'terraform/'
 
   # Step 5: Terraform Apply (Only on main/master branch)
@@ -32,7 +32,7 @@ steps:
       - '-c'
       - |
         echo "Applying Terraform changes..."
-        terraform -chdir=terraform apply tfplan
+        terraform -chdir=terraform apply tfplan -var="impersonate_service_account=$_IMPERSONATE_SA"  -var="main_project=$_AR_PROJECT_ID"
     #dir: 'terraform/'
 
   
