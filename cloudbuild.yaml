@@ -1,0 +1,56 @@
+# Google Cloud Build - Terraform Pipeline for GCP
+# This pipeline validates, plans, and applies Terraform configurations for GCP infrastructure
+
+steps:
+  # Step 1: Terraform Init
+  - name: 'hashicorp/terraform:1.6'
+    id: 'terraform-init'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "Initializing Terraform..."
+        terraform -chdir=terraform init -var="impersonate_service_account=$_IMPERSONATE_SA" -backend-config="bucket=$_BACKEND_STATE_BUCKET" -var="main_project=$_AR_PROJECT_ID"
+    #dir: 'terraform/'
+
+  # Step 4: Terraform Plan
+  - name: 'hashicorp/terraform:1.6'
+    id: 'terraform-plan'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "Creating Terraform plan..."
+        terraform -chdir=terraform plan -out=tfplan -var="impersonate_service_account=$_IMPERSONATE_SA" -var="main_project=$_AR_PROJECT_ID"
+    #dir: 'terraform/'
+
+  # Step 5: Terraform Apply (Only on main/master branch)
+  - name: 'hashicorp/terraform:1.6'
+    id: 'terraform-apply'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        echo "Applying Terraform changes..."
+        terraform -chdir=terraform apply tfplan -var="impersonate_service_account=$_IMPERSONATE_SA"  -var="main_project=$_AR_PROJECT_ID"
+    #dir: 'terraform/'
+
+  
+
+# Substitution variables (can be overridden at trigger time)
+# substitutions:
+#   _TF_STATE_BUCKET: 'my-terraform-state-bucket-genai'
+#   _TF_STATE_PREFIX: 'terraform/state'
+#   _REGION: 'us-central1'
+#   _ENVIRONMENT: 'dev'
+
+# Options
+options:
+  logging: CLOUD_LOGGING_ONLY
+  
+# Timeout for the entire build
+timeout: '1800s'
+
+
+# # Service account with necessary GCP permissions
+# serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/terraform-sa@${PROJECT_ID}.iam.gserviceaccount.com'
